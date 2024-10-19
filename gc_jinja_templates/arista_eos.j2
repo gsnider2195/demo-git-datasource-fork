@@ -1,0 +1,49 @@
+!
+username test password test
+no logging console
+logging format timestamp high-resolution
+logging facility local6
+!
+hostname {{ hostname }}
+ip name-server 1.2.3.4
+ip name-server 5.6.7.8
+ip domain-name test.example.com
+!
+ntp source Management1
+ntp server 1.2.3.4 prefer
+ntp server 5.6.7.8
+!
+snmp-server contact "Enterprise Network Operations"
+snmp-server location {{ location.name }}
+snmp-server source-interface Management1
+snmp-server community snmptest ro RO-SNMP-ACL
+snmp-server host 1.1.1.1 traps version 2c snmptest
+snmp-server enable traps entity
+snmp-server enable traps lldp
+snmp-server enable traps snmp
+!
+tacacs-server key tacacstest
+tacacs-server host 2.2.2.2
+ip tacacs source-interface Management1
+!
+aaa authentication login default group tacacs+ local
+aaa authentication enable default group tacacs+ local
+aaa authorization console
+aaa authorization exec default group tacacs+ none
+aaa authorization commands 1,15 default group tacacs+ none
+aaa accounting exec default start-stop group tacacs+
+aaa accounting commands 15 default start-stop group tacacs+
+!
+no aaa root
+!
+banner login
+This system is privately owned and operated. Access
+to this system is restricted to authorized users
+only. Criminal and civil laws prohibit unauthorized
+use. Violators will be prosecuted. You must disconnect
+immediately if you are not an authorized user.
+EOF
+!
+management api http-commands
+  no shutdown
+!
